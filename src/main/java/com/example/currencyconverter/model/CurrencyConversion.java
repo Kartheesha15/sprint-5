@@ -82,6 +82,13 @@ public class CurrencyConversion {
     public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
+    public Double getRateChange() {
+        return getRateChange();
+    }
+    
+  /*   public void setRateChange(Double rateChange) {
+        this.rateChange = rateChange;
+    } */
 
     // Helper method for formatting
     public String getFormattedConvertedAmount() {

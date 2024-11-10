@@ -9,38 +9,33 @@
             margin: 0 auto;
             padding: 20px;
         }
+        .history-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin: 20px 0;
         }
         th, td {
-            padding: 10px;
+            padding: 12px;
             text-align: left;
-            border: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
+            font-weight: bold;
         }
-        .message {
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 4px;
+        tr:hover {
+            background-color: #f9f9f9;
         }
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .info-message {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-        .history-empty {
+        .empty-message {
             text-align: center;
-            color: #666;
             padding: 20px;
+            color: #666;
         }
         .back-button {
             display: inline-block;
@@ -51,49 +46,58 @@
             border-radius: 4px;
             margin-bottom: 20px;
         }
+        .clear-button {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+        .clear-button:hover {
+            background-color: #d32f2f;
+        }
     </style>
 </head>
 <body>
     <a href="/api/v1/converter" class="back-button">Back to Converter</a>
     
-    <h1>Conversion History</h1>
-    
-    <!-- Error Message Display -->
-    <div th:if="${errorMessage}" class="message error-message">
-        <p th:text="${errorMessage}"></p>
+    <div class="history-container">
+        <h1>Conversion History</h1>
+        
+        <div th:if="${#lists.isEmpty(conversions)}" class="empty-message">
+            <p>No conversion history available</p>
+        </div>
+        
+        <div th:if="${not #lists.isEmpty(conversions)}">
+            <form th:action="@{/api/v1/convert/clear-history}" method="post">
+                <button type="submit" class="clear-button">Clear History</button>
+            </form>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Amount</th>
+                        <th>To</th>
+                        <th>Converted Amount</th>
+                        <th>Rate</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="conv : ${conversions}">
+                        <td th:text="${conv.fromCurrency}"></td>
+                        <td th:text="${#numbers.formatDecimal(conv.amount, 1, 2)}"></td>
+                        <td th:text="${conv.toCurrency}"></td>
+                        <td th:text="${#numbers.formatDecimal(conv.result, 1, 2)}"></td>
+                        <td th:text="${#numbers.formatDecimal(conv.rate, 1, 6)}"></td>
+                        <td th:text="${#temporals.format(conv.timestamp, 'dd-MM-yyyy HH:mm')}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <!-- Info Message Display -->
-    <div th:if="${infoMessage}" class="message info-message">
-        <p th:text="${infoMessage}"></p>
-    </div>
-    
-    <div th:if="${#lists.isEmpty(conversions)}" class="history-empty">
-        <p>No conversion history available</p>
-    </div>
-    
-    <table th:if="${!#lists.isEmpty(conversions)}">
-        <thead>
-            <tr>
-                <th>From Currency</th>
-                <th>Amount</th>
-                <th>To Currency</th>
-                <th>Converted Amount</th>
-                <th>Rate</th>
-                <th>Timestamp</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="conversion : ${conversions}">
-                <td th:text="${conversion.fromCurrency}"></td>
-                <td th:text="${conversion.amount}"></td>
-                <td th:text="${conversion.toCurrency}"></td>
-                <td th:text="${conversion.convertedAmount}"></td>
-                <td th:text="${#numbers.formatDecimal(conversion.rate, 1, 6)}"></td>
-                <td th:text="${#temporals.format(conversion.timestamp, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            </tr>
-        </tbody>
-    </table>
 </body>
 </html>
-

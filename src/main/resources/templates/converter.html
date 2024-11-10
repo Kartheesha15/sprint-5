@@ -228,20 +228,25 @@
             <div th:if="${#lists.isEmpty(recentConversions)}">
                 <p>No recent conversions</p>
             </div>
-            <div th:each="conversion : ${recentConversions}" class="history-item">
-                <p>
-                    <span th:text="${conversion.amount}"></span>
-                    <span th:text="${conversion.fromCurrency}"></span> →
-                    <span th:text="${conversion.result}"></span>
-                    <span th:text="${conversion.toCurrency}"></span>
-                </p>
-                <small th:text="${#temporals.format(conversion.timestamp, 'dd-MM-yyyy HH:mm')}"></small>
+            <div th:if="${not #lists.isEmpty(recentConversions)}" class="history-list">
+                <div th:each="conv : ${recentConversions}" class="history-item">
+                    <p class="conversion-amount">
+                        <span th:text="${#numbers.formatDecimal(conv.amount, 1, 2)}"></span>
+                        <span th:text="${conv.fromCurrency}"></span> →
+                        <span th:text="${#numbers.formatDecimal(conv.result, 1, 2)}"></span>
+                        <span th:text="${conv.toCurrency}"></span>
+                    </p>
+                    <p class="conversion-rate">
+                        Rate: <span th:text="${#numbers.formatDecimal(conv.rate, 1, 6)}"></span>
+                    </p>
+                    <p class="conversion-time">
+                        <small th:text="${#temporals.format(conv.timestamp, 'dd-MM-yyyy HH:mm')}"></small>
+                    </p>
+                </div>
+                <form th:action="@{/api/v1/convert/clear-history}" method="post">
+                    <button type="submit" class="clear-history">Clear History</button>
+                </form>
             </div>
-            <form th:if="${not #lists.isEmpty(recentConversions)}" 
-                  th:action="@{/api/v1/convert/clear-history}" method="post">
-                <button type="submit" class="clear-history">Clear History</button>
-            </form>
         </div>
-    </div>
 </body>
 </html>
