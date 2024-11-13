@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.currencyconverter.model.CurrencyConversion;
-import com.example.currencyconverter.model.RateTrend;
+//import com.example.currencyconverter.model.RateTrend;
 import com.example.currencyconverter.model.ConversionResult;
 import com.example.currencyconverter.service.CurrencyConverterService;
 
@@ -68,20 +68,5 @@ public class CurrencyConverterController {
         return "redirect:/api/v1/converter";
     }
 
-   /*   @GetMapping("/trends")
-    public String showTrends(Model model) {
-        model.addAttribute("allTrends", converterService.getAllTrends());
-        return "trends";
-    }
 
-    @GetMapping("/trends/{fromCurrency}/{toCurrency}")
-    public String showSpecificTrend(@PathVariable String fromCurrency,
-                                  @PathVariable String toCurrency,
-                                  Model model) {
-        List<RateTrend> trends = converterService.getTrends(fromCurrency, toCurrency);
-        model.addAttribute("trends", trends);
-        model.addAttribute("fromCurrency", fromCurrency);
-        model.addAttribute("toCurrency", toCurrency);
-        return "specific-trend";
-    } */
 }
