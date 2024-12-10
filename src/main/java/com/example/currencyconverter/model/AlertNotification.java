@@ -1,11 +1,11 @@
 package com.example.currencyconverter.model;
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "alert_notifications")
 public class AlertNotification {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -91,4 +91,5 @@ public class AlertNotification {
     public void setAlert(ExchangeRateAlert alert) {
         this.alert = alert;
     }
+
 }
