@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Conversion History</title>
+    <title>Favorite Conversions</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -9,7 +9,7 @@
             margin: 0 auto;
             padding: 20px;
         }
-        .history-container {
+        .favorites-container {
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 20px;
@@ -58,34 +58,25 @@
         .clear-button:hover {
             background-color: #d32f2f;
         }
-        .favorite-button {
-            background-color: #ffeb3b;
-            color: black;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .favorite-button:hover {
-            background-color: #fbc02d;
-        }
     </style>
 </head>
 <body>
     <a href="/api/v1/converter" class="back-button">Back to Converter</a>
-    
-    <div class="history-container">
-        <h1>Conversion History</h1>
-        
-        <div th:if="${#lists.isEmpty(conversions)}" class="empty-message">
-            <p>No conversion history available</p>
+
+    <div class="favorites-container">
+        <h1>Favorite Conversions</h1>
+
+        <div th:if="${#lists.isEmpty(favorites)}" class="empty-message">
+            <p>No favorite conversions available</p>
         </div>
-        
-        <div th:if="${not #lists.isEmpty(conversions)}">
-            <form th:action="@{/api/v1/convert/clear-history}" method="post">
-                <button type="submit" class="clear-button">Clear History</button>
+
+        <div th:if="${not #lists.isEmpty(favorites)}">
+            <!-- Form to clear the favorites -->
+            <form th:action="@{/favorites/clear}" method="post">
+                <button type="submit" class="clear-button">Clear Favorites</button>
             </form>
-            
+
+            <!-- Table for displaying the favorite conversions -->
             <table>
                 <thead>
                     <tr>
@@ -95,23 +86,16 @@
                         <th>Converted Amount</th>
                         <th>Rate</th>
                         <th>Date & Time</th>
-                        <th>Add to Favorites</th> <!-- New column for favorites -->
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="conv : ${conversions}">
+                    <tr th:each="conv : ${favorites}">
                         <td th:text="${conv.fromCurrency}"></td>
                         <td th:text="${#numbers.formatDecimal(conv.amount, 1, 2)}"></td>
                         <td th:text="${conv.toCurrency}"></td>
                         <td th:text="${#numbers.formatDecimal(conv.result, 1, 2)}"></td>
                         <td th:text="${#numbers.formatDecimal(conv.rate, 1, 6)}"></td>
                         <td th:text="${#temporals.format(conv.timestamp, 'dd-MM-yyyy HH:mm')}"></td>
-                        <td>
-                            <!-- Button to add conversion as favorite -->
-                            <form th:action="@{/favorites/add/{conversionId}(conversionId=${conv.id})}" method="post">
-                                <button type="submit">Add to Favorites</button>
-                            </form>
-                        </td>
                     </tr>
                 </tbody>
             </table>
