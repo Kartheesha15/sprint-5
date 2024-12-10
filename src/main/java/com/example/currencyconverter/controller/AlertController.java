@@ -4,7 +4,7 @@ import com.example.currencyconverter.model.*;
 import com.example.currencyconverter.repository.AlertNotificationRepository;
 import com.example.currencyconverter.service.AlertService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
