@@ -4,7 +4,8 @@ package com.example.currencyconverter.model;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.math.BigDecimal;
+import java.math.BigDecimal; 
+
 
 import jakarta.persistence.Entity;
 
